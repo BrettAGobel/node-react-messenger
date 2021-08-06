@@ -13,9 +13,9 @@ const [users, setUsers] =useState(null)
 
 
   useEffect(() => {
-    fetch("/api")
+    fetch("/messages")
         .then(res => res.json())
-        .then(data => setData(data.message))
+        .then(data => setData(data))
   }, [])
 
 

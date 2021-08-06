@@ -22,7 +22,7 @@ return (
         <div className='post-messages'>
             <form onSubmit={onSubmit} method='post' action='/messages'>
                 <label htmlFor='post-message' />
-                <input type='text' name='post-message' value'message' onChange={event => setMessages(event.target.value)}/>
+                <input type='text' name='post-message' value='message' onChange={event => setMessages(event.target.value)}/>
                 <button>Send Message</button>
             </form>
         </div>
