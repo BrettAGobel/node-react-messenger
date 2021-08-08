@@ -1,18 +1,28 @@
-
+const connection = require('./databaseConnect').pool
 // const mysql = require('mysql')
 // import mysql from 'mysql'
 // const mysql = mysql
+require('dotenv').config({path: 'C:\\Users\\brett\\Documents\\random-web-projects\\node-react-messenger\\.env'})
 
-export async function getAllMessages() {
-    try {
+let messageDb = {}
 
-        const mySqlQuery = "SELECT BIN_TO_UUID(messageId) AS messageId, BIN_TO_UUID(userId) as userId, messageText, messageTime FROM messages"
+messageDb.getAllMessages = () => {
+
+        return new Promise((resolve, reject) => {
+            connection.query('SELECT bin_to_uuid(u.userId) as userId, userName, messageText, messageTime FROM users as u JOIN messages as m ON u.userId = m.userId', (error, result) => {
+            if (error) {
+                console.log(error);
+                return reject(error)
+            }
+                return resolve(result)
+
+            })
+
+        })
 
 
-        // const [rows] = await connect.query(mySqlQuery)
-        // return [rows]
-    } catch (error) {
-        console.log(error)
-        return undefined
-    }
+
+
 }
+
+module.exports =  messageDb

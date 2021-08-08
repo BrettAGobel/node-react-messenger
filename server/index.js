@@ -1,39 +1,50 @@
 const express = require('express')
-require('dotenv').config({path: ''})
+require('dotenv').config({path: 'C:\\Users\\brett\\Documents\\random-web-projects\\node-react-messenger\\.env'})
 const app = express()
 const mysql = require('mysql2')
 const connection = require('./utils/databaseConnect.js')
 const port = process.env.PORT || 3001;
-
-databaseConnection = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password:  process.env.DB_PASS,
-    database: process.env.MYSQL_DATABASE,
-    connectionLimit: 10,
-    waitForConnections: true,
-    namedPlaceholders: true
+const db = require('./utils/getAllMessages.js')
 
 
-})
+// databaseConnection = mysql.createPool({
+//     host: process.env.DB_HOST,
+//     user: process.env.DB_USER,
+//     password:  process.env.DB_PASS,
+//     database: process.env.MYSQL_DATABASE,
+//     connectionLimit: 10,
+//     waitForConnections: true,
+//     namedPlaceholders: true
+//
+//
+// })
 
 
-
-app.get('/messages', (req, res) => {
+app.get('/messages', async (req, res) => {
     try {
-        databaseConnection.getConnection(((err, connection) => {
-            connection.query('SELECT * FROM messages', (e, r,f) => {
-                console.log(r)
-            })
-
-        }))
-
-
+        let results = await db.getAllMessages()
+        res.json(results)
     } catch (error) {
         console.log(error)
-        return undefined
+        res.sendStatus(500)
     }
+    // res.json({data: getAllMessages.then(res => res.json({}))})
+
 })
+
+
+
+// app.get('/messages', (req, res) => {
+//
+//         connection.databaseConnection.getConnection(((err, connection) => {
+//
+//             connection.query('SELECT * FROM messages', (error, result) => {
+//                 if (error) throw error;
+//                 return result
+//
+//             })
+//         }))
+// })
 
 app.post('/messages', (req, res) => {
 
