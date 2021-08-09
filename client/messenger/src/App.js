@@ -38,7 +38,7 @@ function messageMap (messageData) {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <div className="main">
         {users ? <Messages messageText={data.messageText} /> : <Login />}
         <div>
           {!data ? "loading...": data.map(obj => {
@@ -53,7 +53,7 @@ function messageMap (messageData) {
         {/*      {!data ? "loading...": messageMap(data)}*/}
         {/*  </div>*/}
 
-      </header>
+      </div>
     </div>
   );
 }

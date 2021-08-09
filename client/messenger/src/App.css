@@ -36,3 +36,26 @@
     transform: rotate(360deg);
   }
 }
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  background: lightgrey ;
+  width: 50%;
+  height: 100%;
+  border-radius: 1rem;
+
+}
+
+.main {
+
+  display: flex;
+  flex-direction: column;
+
+
+}
+
+.form-inner {
+  width: 100px
+}
