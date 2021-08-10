@@ -4,8 +4,12 @@ const app = express()
 const mysql = require('mysql2')
 const connection = require('./utils/databaseConnect.js')
 const port = process.env.PORT || 3001;
-const db = require('./utils/getAllMessages.js')
+const db = require('./utils/sqlStatements.js')
+const post = require('./utils/validateLogin')
+const bodyParser = require('body-parser')
 
+const jsonParser = bodyParser.json()
+app.use(jsonParser)
 
 // databaseConnection = mysql.createPool({
 //     host: process.env.DB_HOST,
@@ -30,6 +34,18 @@ app.get('/messages', async (req, res) => {
     }
     // res.json({data: getAllMessages.then(res => res.json({}))})
 
+})
+
+app.post('/login/', async (req, res) => {
+    try {
+        let userName = req.body.userName
+        console.log(userName)
+        let results = await db.getUserByUserName(userName)
+        console.log(results)
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(500)
+    }
 })
 
 

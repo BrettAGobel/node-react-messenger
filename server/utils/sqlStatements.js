@@ -25,4 +25,26 @@ messageDb.getAllMessages = () => {
 
 }
 
+
+messageDb.getUserByUserName = (userName) => {
+
+    return new Promise( (resolve, reject) => {
+
+        let user = userName
+        connection.query('SELECT bin_to_uuid(userId) as userId, userName, userPass FROM users WHERE userName = ?', [userName], (error, result) => {
+            if (error) {
+                console.log(error);
+                return reject(error)
+            }
+            return resolve(result)
+
+        })
+
+    })
+
+
+
+
+}
+
 module.exports =  messageDb

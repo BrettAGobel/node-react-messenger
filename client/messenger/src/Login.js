@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import formik, { useFormik } from 'formik'
+import axios from "axios";
 
 
 const Login = () => {
@@ -48,9 +49,18 @@ const Login = () => {
         },
         validate,
 
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+        onSubmit: async (values) => {
+            const { userName, password } = values
+            const response = await axios.post('/login', {userName, password})
+            if (response) {
+                console.log('ok')
+            }
+
+
+
+
         },
+
 
     });
 
@@ -61,7 +71,7 @@ const Login = () => {
     return (
         <div className='login-form'>
             <div className='form-inner'>
-           <form onSubmit={formik.handleSubmit}><div>
+           <form onSubmit={formik.handleSubmit} method='post' action='/login'><div>
                <label htmlFor='userName'>userName</label>
                <input type='text' id='userName' name='userName' value={formik.values.userName} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
                {/*{formik.errors.userName ? <div>{formik.errors.userName}</div> : null}*/}
@@ -81,6 +91,7 @@ const Login = () => {
 
                ) : null}
                </div>
+               <button type='submit'>Login</button>
            </form>
             </div>
         </div>
