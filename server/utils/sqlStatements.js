@@ -6,9 +6,9 @@ require('dotenv').config({path: 'C:\\Users\\brett\\Documents\\random-web-project
 
 let messageDb = {}
 
-messageDb.getAllMessages = () => {
+messageDb.getAllMessages = async () => {
 
-        return new Promise((resolve, reject) => {
+        return await new Promise((resolve, reject) => {
             connection.query('SELECT bin_to_uuid(u.userId) as userId, userName, messageText, messageTime FROM users as u JOIN messages as m ON u.userId = m.userId', (error, result) => {
             if (error) {
                 console.log(error);
@@ -26,25 +26,39 @@ messageDb.getAllMessages = () => {
 }
 
 
-messageDb.getUserByUserName = (userName) => {
+messageDb.getUserByUserName = async (userName) => {
 
-    return new Promise( (resolve, reject) => {
+    return await new Promise( (resolve, reject) => {
 
-        let user = userName
-        connection.query('SELECT bin_to_uuid(userId) as userId, userName, userPass FROM users WHERE userName = ?', [userName], (error, result) => {
+        connection.query('SELECT bin_to_uuid(userId) as userId, userName, userPass FROM users WHERE userName = ?', [userName], (error, rows) => {
             if (error) {
-                console.log(error);
                 return reject(error)
+            } else if (rows.length <= 0) {
+                return reject('username does not exist')
             }
-            return resolve(result)
+
+            return resolve(rows)
 
         })
 
     })
+}
+
+messageDb.updateLoginStatus = async (userId) => {
+        connection.query('UPDATE users SET userLogged = true WHERE uuid_to_bin(?) = userId', [userId], (error, result) => {
+            if (error) {
+                console.log(error)
+        }
+
+})}
 
 
 
+messageDb.postMessage = async (messageText, userId) => {
+    connection.query('INSERT INTO messages (messageId, messageText, messageTime, userId) values (uuid_to_bin(uuid()), messageText = ? , now(), userId = ?', [messageText, userId], ((err, result) => {
 
+    }))
 }
 
 module.exports =  messageDb
+

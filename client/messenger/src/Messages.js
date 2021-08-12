@@ -1,13 +1,15 @@
 import React, {useState, useEffect} from "react";
+import axios from "axios";
 
-
-const Messages = (data) => {
+const Messages = () => {
 
 const [messages, setMessages] = useState('')
 
 
-function onSubmit(e, messages) {
+function onSubmit(e) {
     e.preventDefault()
+    setMessages([e.target.name] = e.target.value)
+    axios.post('/messages', messages)
 
 
     }
@@ -16,7 +18,7 @@ function onSubmit(e, messages) {
 return (
     <div>
         <div className='received-messages'>
-            <p>{data}</p>
+            <p></p>
         </div>
 
         <div className='post-messages'>

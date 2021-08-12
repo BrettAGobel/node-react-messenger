@@ -39,7 +39,9 @@ function messageMap (messageData) {
   return (
     <div className="App">
       <div className="main">
-        {users ? <Messages messageText={data.messageText} /> : <Login />}
+        {/*{users ? <Messages messageText={data.messageText} /> : <Login />}*/}
+          <Login />
+          <Messages />
         <div>
           {!data ? "loading...": data.map(obj => {
               return (

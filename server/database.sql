@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS USERS (
 userId binary (16) not null,
 userName varchar (25) not null,
 userPass varchar (50) not null,
+userLogged boolean not null,
 primary key (userId),
 unique(userName)
 );

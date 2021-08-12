@@ -7,60 +7,42 @@ const port = process.env.PORT || 3001;
 const db = require('./utils/sqlStatements.js')
 const post = require('./utils/validateLogin')
 const bodyParser = require('body-parser')
+const login = require('./utils/handleLogin.js')
 
 const jsonParser = bodyParser.json()
 app.use(jsonParser)
-
-// databaseConnection = mysql.createPool({
-//     host: process.env.DB_HOST,
-//     user: process.env.DB_USER,
-//     password:  process.env.DB_PASS,
-//     database: process.env.MYSQL_DATABASE,
-//     connectionLimit: 10,
-//     waitForConnections: true,
-//     namedPlaceholders: true
-//
-//
-// })
 
 
 app.get('/messages', async (req, res) => {
     try {
         let results = await db.getAllMessages()
         res.json(results)
+
     } catch (error) {
         console.log(error)
         res.sendStatus(500)
     }
-    // res.json({data: getAllMessages.then(res => res.json({}))})
 
 })
 
 app.post('/login/', async (req, res) => {
     try {
         let userName = req.body.userName
-        console.log(userName)
-        let results = await db.getUserByUserName(userName)
-        console.log(results)
+        let userPass = req.body.password
+        let results = await login.handleLogin(userName, userPass)
+        res.cookie('token', results.token, {
+                        secure: false, // set to true if your using https
+                        httpOnly: true,
+                        expires: results.date
+                    })
+        res.send({data: results, message: 'this seems to work..'})
     } catch (error) {
         console.log(error)
-        res.sendStatus(500)
+        // res.sendStatus(500)
+        res.send({message: 'username does not exist', status: 500})
     }
 })
 
-
-
-// app.get('/messages', (req, res) => {
-//
-//         connection.databaseConnection.getConnection(((err, connection) => {
-//
-//             connection.query('SELECT * FROM messages', (error, result) => {
-//                 if (error) throw error;
-//                 return result
-//
-//             })
-//         }))
-// })
 
 app.post('/messages', (req, res) => {
 
