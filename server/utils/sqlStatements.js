@@ -44,13 +44,21 @@ messageDb.getUserByUserName = async (userName) => {
     })
 }
 
-messageDb.updateLoginStatus = async (userId) => {
+messageDb.updateLoginStatusIn = async (userId) => {
         connection.query('UPDATE users SET userLogged = true WHERE uuid_to_bin(?) = userId', [userId], (error, result) => {
             if (error) {
                 console.log(error)
         }
 
 })}
+
+
+messageDb.updateLoginStatusOut = async (userId) => {
+    connection.query('UPDATE users SET userLogged = false WHERE uuid_to_bin(?) = userId', [userId], (error, result) => {
+        if (error) {
+            console.log(error)
+        }
+    })}
 
 
 

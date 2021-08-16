@@ -64,6 +64,15 @@ const Login = () => {
 
     });
 
+async function logOut (event) {
+        event.preventDefault()
+        const response = await axios.get('/logout')
+        if (response) {
+            console.log('made request')
+        }
+
+
+}
 
 
 
@@ -92,7 +101,9 @@ const Login = () => {
                ) : null}
                </div>
                <button type='submit'>Login</button>
+
            </form>
+                <button type='logout' onClick={event => logOut(event)}>Logout</button>
             </div>
         </div>
 

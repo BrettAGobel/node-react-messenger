@@ -29,7 +29,7 @@ validateLogin = async (dbUserEntry, formUserPass) => {
         success.token = accessToken
         success.date = d
         console.log(success)
-        await db.updateLoginStatus(userId)
+        await db.updateLoginStatusIn(userId)
         return success
         // res.setHeader('auth-token', accessToken.toString())
         // res.cookie('token', accessToken, {
