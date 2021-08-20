@@ -5,7 +5,7 @@ const mysql = require('mysql2')
 const connection = require('./utils/databaseConnect.js')
 const port = process.env.PORT || 3001;
 const db = require('./utils/sqlStatements.js')
-const post = require('./utils/validateLogin')
+const post = require('./utils/handlePost')
 const bodyParser = require('body-parser')
 const login = require('./utils/handleLogin.js')
 const logout = require('./utils/handleLogout')
@@ -58,8 +58,15 @@ app.get('/logout', async (req, res) => {
 })
 
 
-app.post('/messages', (req, res) => {
-
+app.post('/messages', async (req, res) => {
+    try {
+        let message = req.body.value
+        let response = await post(req, res)
+        let results = await db.getAllMessages()
+        res.json(results)
+    } catch (error) {
+        console.log(error)
+    }
 } )
 
 app.get('/api', (req, res) => {

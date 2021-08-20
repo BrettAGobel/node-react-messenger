@@ -4,20 +4,20 @@ import React, {useState, useEffect} from "react";
 import logo from './logo.svg';
 import './App.css';
 import Login from "./Login";
-import Messages from "./Messages";
+import Post from "./Post";
 
 function App() {
 
 const [data, setData] = useState()
 const [users, setUsers] =useState()
 
-
-  useEffect(() => {
-    fetch("/messages")
-        .then(res => res.json())
-        .then(info => setData(info))
-
-  }, [])
+  //
+  // useEffect(() => {
+  //   fetch("/messages")
+  //       .then(res => res.json())
+  //       .then(info => setData(info))
+  //
+  // }, [])
 
 function messageMap (messageData) {
 
@@ -41,16 +41,8 @@ function messageMap (messageData) {
       <div className="main">
         {/*{users ? <Messages messageText={data.messageText} /> : <Login />}*/}
           <Login />
-          <Messages />
-        <div>
-          {!data ? "loading...": data.map(obj => {
-              return (
-                  <>
-                      <p>{obj.userName}</p>
-                  <p>{obj.userId}</p>
-                  <p>{obj.messageText}</p>
-                  </>)})}
-        </div>
+          <Post />
+
         {/*  <div>*/}
         {/*      {!data ? "loading...": messageMap(data)}*/}
         {/*  </div>*/}

@@ -44,6 +44,27 @@ messageDb.getUserByUserName = async (userName) => {
     })
 }
 
+
+messageDb.getUserByUserNameAlt = async (userName) => {
+
+    return await new Promise( (resolve, reject) => {
+
+        connection.query('SELECT userId as userId FROM users WHERE userName = ?', [userName], (error, rows) => {
+            if (error) {
+                return reject(error)
+            } else if (rows.length <= 0) {
+                return reject('username does not exist')
+            }
+
+            return resolve(rows)
+
+        })
+
+    })
+}
+
+
+
 messageDb.updateLoginStatusIn = async (userId) => {
         connection.query('UPDATE users SET userLogged = true WHERE uuid_to_bin(?) = userId', [userId], (error, result) => {
             if (error) {
@@ -62,9 +83,11 @@ messageDb.updateLoginStatusOut = async (userId) => {
 
 
 
-messageDb.postMessage = async (messageText, userId) => {
-    connection.query('INSERT INTO messages (messageId, messageText, messageTime, userId) values (uuid_to_bin(uuid()), messageText = ? , now(), userId = ?', [messageText, userId], ((err, result) => {
-
+messageDb.postMessage = async  (match, messageText) => {
+    connection.query('INSERT INTO messages (messageId, userId, messageText, messageTime) values (uuid_to_bin(uuid()), (select userId from users where userName = ? ), ? ,  now())', [match, messageText], ((error, result) => {
+    if (error) {
+    console.log(error)
+}
     }))
 }
 
