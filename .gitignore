@@ -2,3 +2,4 @@
 /server/node_modules/
 .env
 /server/utils/sqlStatements.md
+/client/node_modules

@@ -11,6 +11,7 @@ const login = require('./utils/handleLogin.js')
 const logout = require('./utils/handleLogout')
 const cookieParser = require('cookie-parser')
 
+
 const jsonParser = bodyParser.json()
 app.use(jsonParser)
 app.use(cookieParser())
