@@ -6,7 +6,7 @@ import { io } from 'socket.io-client'
 
 
 
-const Login = ({setSocket, socket}) => {
+const Login = ({setSocket, socket, setLoggedStatus, setToken}) => {
 
 
 
@@ -60,12 +60,13 @@ const Login = ({setSocket, socket}) => {
             const response = await axios.post('/login', {userName, password})
             if (response.data.validatedUser.token) {
                 localStorage.setItem('token', response.data.validatedUser.token)
-                const newSocket = await io('http://localhost:3001')
+                setLoggedStatus(true)
+                // const newSocket = await io('http://localhost:3001')
                 // const tokenValidated = await axios.get('/login', )
                 // console.log(newSocket)
 
 
-                    await setSocket(newSocket)
+                     // setSocket(newSocket)
 
 
                 // newSocket.on('connection', console.log('connection successful'))

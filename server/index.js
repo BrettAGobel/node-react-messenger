@@ -36,6 +36,12 @@ server.listen(expressPort, () => {
 })
 
 
+
+io.on('connect', socket => {
+     chat(io, socket)
+})
+
+
 const jsonParser = bodyParser.json()
 app.use(jsonParser)
 app.use(cookieParser())
@@ -52,6 +58,12 @@ app.get('/messages', async (req, res) => {
 
 })
 
+app.post('/validateToken', (req, res) => {
+    console.log(req.body.token)
+    // jwt.verify(req.body.token, key)
+})
+
+
 app.post('/login/', async (req, res, next) => {
     try {
         let userName = req.body.userName
@@ -59,7 +71,7 @@ app.post('/login/', async (req, res, next) => {
         let validatedUser = await login.handleLogin(userName, userPass, io)
         if (validatedUser) {
             // console.log(validatedUser.userName)
-            await chat(io, validatedUser.userName)
+
              // http only cookie:  difficult to deal with cause client can't re-access this cookie after a refresh to determine if someone has already logged
             // res.cookie('authToken', validatedUser.token, {
             //     secure: false, // set to true if your using https

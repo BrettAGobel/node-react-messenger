@@ -22,9 +22,9 @@ class connectionWS {
         //     console.log('connection achieved')
         // })
 
-        socket.on('getMessages', () => {
-            this.getMessages()
-        });
+        // socket.on('getMessages', () => {
+        //     this.getMessages()
+        // });
         socket.on('message', value => {
             this.handleChatMessage(value)
         });
@@ -33,12 +33,12 @@ class connectionWS {
 
     }
 
-    getMessages() {
-        messages.forEach(messageObj => {
-            this.sendMessage(messageObj)
-        })
-
-    }
+    // getMessages() {
+    //     messages.forEach(messageObj => {
+    //         this.sendMessage(messageObj)
+    //     })
+    //
+    // }
 
     sendMessage (message) {
         this.io.sockets.emit('message', message)
@@ -68,20 +68,14 @@ class connectionWS {
 
 }
 
-async function chat(io, userName) {
+async function chat(io, socket, userName) {
     // io.removeAllListeners()
     // await io.use()jwt.decode(token, process.env.ACCESS_TOKEN_SECRET)
-    io.on('connection', (socket) => {
-
+    // io.on('connect', (socket) => {
+    //     console.log('new connection')
         // console.log(userName)
-         return new connectionWS(io, socket, userName)
+        return new connectionWS(io, socket, userName)
 
-
-
-
-
-
-    })
 }
 
 module.exports = chat
