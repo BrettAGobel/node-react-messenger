@@ -1,8 +1,11 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const db = require('./sqlStatements')
+// const chat = require('./utils/connectionWS')
+const chat = require('../utils/connectionWS')
 
-validateLogin = async (dbUserEntry, formUserPass) => {
+
+validateLogin = async (dbUserEntry, formUserPass, io) => {
     let errors = {
         message1: 'incorrect username/password'
     }
@@ -10,27 +13,29 @@ validateLogin = async (dbUserEntry, formUserPass) => {
 
 
 
-    //this is tenative as I currently have no email field.  This will exclude duplicate results of database entries which have identical usernames.  revise later
-
+    //this is tentative as I currently have no email field.  This will exclude duplicate results of database entries which have identical usernames.  revise later
+    let userName = dbUserEntry[0].userName
     let pass = dbUserEntry[0].userPass
     let payload = dbUserEntry[0].userName
-    let userId = `${dbUserEntry[0].userId}`
-    console.log(userId)
+    let userId = dbUserEntry[0].userId
     if (formUserPass !== pass) {
         console.log('wrong pass fooo')
         return errors
 
     } else {
-        let success = {}
+
+        console.log(userName)
+        let validatedUser = {}
         let d = new Date()
         d.setTime(d.getTime() + 10 * 60 * 1000)
-        console.log('matches!')
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET)
-        success.token = accessToken
-        success.date = d
-        console.log(success)
+        validatedUser.token = accessToken
+        validatedUser.date = d
+        validatedUser.userName = userName
+        // console.log(validatedUser)
         await db.updateLoginStatusIn(userId)
-        return success
+        // await chat(io, userName)
+        return (validatedUser)
         // res.setHeader('auth-token', accessToken.toString())
         // res.cookie('token', accessToken, {
         //             secure: false, // set to true if your using https

@@ -1,26 +1,28 @@
 import React, {useState, useEffect} from "react";
 import axios from "axios";
 import Messages from "./Messages";
+import  { io } from 'socket.io-client'
 
-const Post = () => {
+const Post = ({socket}) => {
 
-const [messages, setMessages] = useState({value: ''})
-const [data, setData] = useState()
-
-
-    useEffect(() => {
-      fetch("/messages")
-          .then(res => res.json())
-          .then(info => setData(info))
-
-    }, [])
+const [value, setValue] = useState({value: ''})
 
 
-async function onSubmit(event) {
+
+    // useEffect(() => {
+    //   fetch("http://localhost:3001/messages")
+    //       .then(res => res.json())
+    //       .then(info => setData(info))
+    //
+    // }, [])
+
+
+    async function onSubmit(event) {
     event.preventDefault()
-    // setMessages([event.target.name] = event.target.value)
-    const postResponse = await axios.post('/messages', messages)
-    setData(postResponse.data)
+    await socket.emit('message', value.value)
+        setValue('')
+
+
 
 
 }
@@ -31,19 +33,19 @@ async function onSubmit(event) {
 
 return (
 
-    <div>
 
 
-        <div className='post-messages'>
-            <form onSubmit={event => onSubmit(event)} method='post' action='/messages'>
+
+        <div >
+            <form className='post-messages' onSubmit={event => onSubmit(event)} method='post' action='/messages'>
                 <label htmlFor='post-message' />
-                <input type='text' name='post-message' onChange={event => setMessages({value: event.target.value})}/>
-                <button>Send Message</button>
+                <input type='text' name='post-message' id='post-input' onChange={event => setValue({value: event.target.value})}/>
+                <button id='send-message'>Send Message</button>
             </form>
         </div>
-        {!data ? "loading messages": <Messages data={data}/>}
 
-    </div>
+
+
 
 )
 

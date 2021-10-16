@@ -5,13 +5,29 @@ import logo from './logo.svg';
 import './App.css';
 import Login from "./Login";
 import Post from "./Post";
+import { io } from 'socket.io-client'
+import socketClient  from "socket.io-client"
+import  openSocket  from 'socket.io-client'
+import Messages from "./Messages";
 
 function App() {
 
-const [data, setData] = useState()
+
+
+
+const [socket, setSocket] = useState()
+const [loggedStatus, setLoggedStatus] = useState(false)
 const [users, setUsers] =useState()
 
-  //
+
+    useEffect(()=> {
+        if (window.localStorage.token) {
+          setLoggedStatus(true)
+            const newSocket = io('http://localhost:3001')
+            setSocket(newSocket)
+        }
+    }, [loggedStatus])
+
   // useEffect(() => {
   //   fetch("/messages")
   //       .then(res => res.json())
@@ -19,20 +35,20 @@ const [users, setUsers] =useState()
   //
   // }, [])
 
-function messageMap (messageData) {
-
-    messageData.map(obj => {
-        return (
-
-            <>
-            <p>{obj.userId}</p>
-            <p>{obj.username}</p>
-            <p>{obj.messageText}</p>
-            </>
-        )
-
-    })
-}
+// function messageMap (messageData) {
+//
+//     messageData.map(obj => {
+//         return (
+//
+//             <>
+//             <p>{obj.userId}</p>
+//             <p>{obj.username}</p>
+//             <p>{obj.messageText}</p>
+//             </>
+//         )
+//
+//     })
+// }
 
 
 
@@ -40,12 +56,12 @@ function messageMap (messageData) {
     <div className="App">
       <div className="main">
         {/*{users ? <Messages messageText={data.messageText} /> : <Login />}*/}
-          <Login />
-          <Post />
+          {loggedStatus ? null : <Login setSocket={newSocket => {setSocket(newSocket)}} socket={socket}/>}
+          {socket ? (<><div className='message-module'><div className='messages-main'>
+                <Messages socket={socket}/>
 
-        {/*  <div>*/}
-        {/*      {!data ? "loading...": messageMap(data)}*/}
-        {/*  </div>*/}
+          </div> <Post socket={socket}/></div></>) : (<div>"not connected"</div>)}
+
 
       </div>
     </div>

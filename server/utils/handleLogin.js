@@ -1,12 +1,12 @@
 const db = require('./sqlStatements')
 const passValidation = require('./validateLogin')
 
-async function handleLogin (formUserName, formUserPass) {
+async function handleLogin (formUserName, formUserPass, io) {
 
     let dbUserEntry = await db.getUserByUserName(formUserName)
-    let validationResult = await passValidation(dbUserEntry, formUserPass)
+    let validatedUser = await passValidation(dbUserEntry, formUserPass, io)
 
-        return validationResult
+        return validatedUser
 
 
 }

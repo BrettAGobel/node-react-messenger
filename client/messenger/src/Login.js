@@ -1,9 +1,14 @@
 import React, {useState, useEffect} from "react";
 import formik, { useFormik } from 'formik'
 import axios from "axios";
+import { io } from 'socket.io-client'
 
 
-const Login = () => {
+
+
+const Login = ({setSocket, socket}) => {
+
+
 
 
     const validate = values => {
@@ -46,14 +51,25 @@ const Login = () => {
             userName: '',
             password: '',
 
+
         },
         validate,
 
         onSubmit: async (values) => {
             const { userName, password } = values
             const response = await axios.post('/login', {userName, password})
-            if (response) {
-                console.log('ok')
+            if (response.data.validatedUser.token) {
+                localStorage.setItem('token', response.data.validatedUser.token)
+                const newSocket = await io('http://localhost:3001')
+                // const tokenValidated = await axios.get('/login', )
+                // console.log(newSocket)
+
+
+                    await setSocket(newSocket)
+
+
+                // newSocket.on('connection', console.log('connection successful'))
+
             }
 
 
