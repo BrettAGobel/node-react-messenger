@@ -3,7 +3,7 @@ import axios from "axios";
 import Messages from "./Messages";
 import  { io } from 'socket.io-client'
 
-const Post = ({socket}) => {
+const Post = ({socket, currentUser}) => {
 
 const [value, setValue] = useState({value: ''})
 
@@ -19,7 +19,7 @@ const [value, setValue] = useState({value: ''})
 
     async function onSubmit(event) {
     event.preventDefault()
-    await socket.emit('message', value.value)
+    await socket.emit('message', {messageText: value.value, user: currentUser})
         setValue('')
 
 

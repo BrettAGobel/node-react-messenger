@@ -16,7 +16,6 @@ validateLogin = async (dbUserEntry, formUserPass, io) => {
     //this is tentative as I currently have no email field.  This will exclude duplicate results of database entries which have identical usernames.  revise later
     let userName = dbUserEntry[0].userName
     let pass = dbUserEntry[0].userPass
-    let payload = dbUserEntry[0].userName
     let userId = dbUserEntry[0].userId
     if (formUserPass !== pass) {
         console.log('wrong pass fooo')
@@ -27,8 +26,9 @@ validateLogin = async (dbUserEntry, formUserPass, io) => {
         console.log(userName)
         let validatedUser = {}
         let d = new Date()
+        let tokenPayload = {userName: userName, iat: d.getTime()}
         d.setTime(d.getTime() + 10 * 60 * 1000)
-        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET)
+        const accessToken = jwt.sign(tokenPayload, process.env.ACCESS_TOKEN_SECRET)
         validatedUser.token = accessToken
         validatedUser.date = d
         validatedUser.userName = userName

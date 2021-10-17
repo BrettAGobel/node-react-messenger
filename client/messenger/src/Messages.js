@@ -1,7 +1,8 @@
 import React, {useState, useEffect, useRef} from "react";
+
 import axios from "axios";
 
-const Messages = ({socket}) => {
+const Messages = ({socket, currentUser}) => {
 
 
     const [messages, setMessages] = useState([])

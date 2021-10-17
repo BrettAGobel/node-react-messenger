@@ -8,14 +8,16 @@ const user = {
     name: 'blank'
 }
 
+let user1 = 'brett'
+
 const messages =  []
-const users = {}
+// const users = []
 
 class connectionWS {
-    constructor(io, socket, userName) {
+    constructor(io, socket, user1) {
         this.io = io
         this.socket = socket
-        this.userName = userName
+        this.userName = user1
 
 
         // socket.on('connection', (socket)=> {
@@ -25,8 +27,8 @@ class connectionWS {
         // socket.on('getMessages', () => {
         //     this.getMessages()
         // });
-        socket.on('message', value => {
-            this.handleChatMessage(value)
+        socket.on('message', messageObj => {
+            this.handleChatMessage(messageObj)
         });
 
 
@@ -44,23 +46,24 @@ class connectionWS {
         this.io.sockets.emit('message', message)
     }
 
-    handleChatMessage(value, userName) {
+    handleChatMessage(messageObj, user1) {
         const currentDate = new Date();
 
         const currentDayOfMonth = currentDate.getDate();
         const currentMonth = currentDate.getMonth(); // Be careful! January is 0, not 1
         const currentYear = currentDate.getFullYear();
 
-        const dateString = currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
+        // const dateString = currentDayOfMonth + "-" + (currentMonth + 1) + "-" + currentYear;
 
         const message = {
-            user: this.userName,
+            user: messageObj.user,
             socketId: this.socket.id,
-            message: value,
+            message: messageObj.messageText,
             date: currentDate
         }
         messages.push(message)
-        console.log(message)
+        console.log(messages)
+        console.log(user1)
         this.sendMessage(message)
 
     }
@@ -68,14 +71,14 @@ class connectionWS {
 
 }
 
-async function chat(io, socket, userName) {
+async function chat(io, socket, user1) {
     // io.removeAllListeners()
     // await io.use()jwt.decode(token, process.env.ACCESS_TOKEN_SECRET)
     // io.on('connect', (socket) => {
     //     console.log('new connection')
         // console.log(userName)
-        return new connectionWS(io, socket, userName)
+        return new connectionWS(io, socket, user1)
 
 }
 
-module.exports = chat
+module.exports = {chat, user1}

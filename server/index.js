@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
-const chat = require('./utils/connectionWS')
+const wS = require('./utils/connectionWS')
+// const user1 = require('./utils/connectionWS')
 const express = require('express')
 require('dotenv').config({path: 'C:\\Users\\brett\\Documents\\random-web-projects\\node-react-messenger\\.env'})
 const app = express()
@@ -38,7 +39,7 @@ server.listen(expressPort, () => {
 
 
 io.on('connect', socket => {
-     chat(io, socket)
+     wS.chat(io, socket)
 })
 
 
@@ -59,7 +60,13 @@ app.get('/messages', async (req, res) => {
 })
 
 app.post('/validateToken', (req, res) => {
-    console.log(req.body.token)
+    console.log('you have hit \/validateToken')
+    let decoded = jwt.decode(req.body.token)
+    let userName = decoded.userName
+    // console.log(userName.toString())
+    //     // return wS.user1 = userName.toString()
+
+
     // jwt.verify(req.body.token, key)
 })
 
