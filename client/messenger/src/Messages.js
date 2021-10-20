@@ -54,8 +54,9 @@ useEffect(() => {
             <div className='message-container'>
                 {messages.map(messageObj => {
                     return (<>
-                        <div key={messages[messageObj]} className={currentSide} >
-                            <span id='sender'>{messageObj.user}:  </span><span id='message-content'>{messageObj.message}</span>
+                        <div key={messages[messageObj]} className='message-content-container' >
+                            <span id='sender'>{messageObj.user}:  </span>
+                            <span id='message-content'>{messageObj.message}</span>
                         </div>
                     <div ref={messagesEndRef}></div></>
                     )

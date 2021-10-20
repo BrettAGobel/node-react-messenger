@@ -1,17 +1,17 @@
 .App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
+  height: 100vh;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+/*@media (prefers-reduced-motion: no-preference) {*/
+/*  .App-logo {*/
+/*    animation: App-logo-spin infinite 20s linear;*/
+/*  }*/
+/*}*/
 
 .App-header {
   background-color: #282c34;
@@ -24,49 +24,59 @@
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/*@keyframes App-logo-spin {*/
+/*  from {*/
+/*    transform: rotate(0deg);*/
+/*  }*/
+/*  to {*/
+/*    transform: rotate(360deg);*/
+/*  }*/
+/*}*/
+
+
+
+.main {
+  /*align-content: center;*/
+  display: grid;
+  grid: 1fr / 15% 1fr 15%;
+
+
 }
 
 .login-form {
+  grid-column: 2/3 ;
   display: flex;
   flex-direction: column;
   align-self: center;
   align-items: center;
   background: lightgrey ;
-  width: 50%;
-  height: 100%;
+  width: 100%;
+  height: 20rem;
   border-radius: 1rem;
 
 }
 
-.main {
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-
-}
 
 .form-inner {
   width: 100px
 }
 
+
+.main-container {
+
+  grid-column: 2 / 3;
+  display: grid;
+  grid: 1fr / 20% 80%;
+}
+
 .message-module {
+  grid-column: 2 / 3;
   padding: 1rem;
   box-sizing: border-box;
   margin: 0;
-  width: 80%;
+  width: 100%;
   border: solid black 0.2rem;
   border-radius: 0.2rem;
 }
@@ -104,56 +114,87 @@
   /*width: 80%;*/
 }
 
-.message-bubble {
+/*.message-bubble {*/
 
-  background: lightgrey;
-  border-radius: 0.2rem;
-  width: max-content;
-  padding: 2px;
-  margin: 2px;
-  position: relative;
-  z-index: 1;
-  transition: opacity 1s;
-
-
+/*  background: lightgrey;*/
+/*  border-radius: 0.2rem;*/
+/*  width: max-content;*/
+/*  padding: 2px;*/
+/*  margin: 2px;*/
+/*  position: relative;*/
+/*  z-index: 1;*/
+/*  transition: opacity 1s;*/
 
 
-}
 
-.message-bubble::before {
-  content: '';
-  width: inherit;
-  height: inherit;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: darkcyan;
-  opacity:  50%;
-  z-index: -1;
 
+/*}*/
+
+/*.message-bubble::before {*/
+/*  content: '';*/
+/*  width: inherit;*/
+/*  height: inherit;*/
+/*  position: absolute;*/
+/*  top: 0;*/
+/*  left: 0;*/
+/*  background: darkcyan;*/
+/*  opacity:  50%;*/
+/*  z-index: -1;*/
+
+/*}*/
+
+
+.message-content-container {
+  background: white;
+  border-radius: 0.25rem;
+  margin: 0.5rem;
 }
 
 #sender {
+  text-align: left;
+  display: block;
   background: lightgrey;
   border-radius: 0.2rem;
-  width: min-content;
   padding: 2px;
-  margin: 2px;
+
 }
 
 #message-content {
+  display: block;
+  text-align: right;
+  padding: 0.5rem;
 
 }
 
-.message-container-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+/*.message-container-right {*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  align-items: flex-end;*/
+/*}*/
+/*.message-container-left {*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  align-items: flex-start;*/
+/*}*/
+
+
+
+
+.users {
+  border: #282c34;
+  background-color: darkgray;
+  grid-column: 1 / 2;
+  width: 100%;
 }
-.message-container-left {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+
+.user {
+
+  height: 25px;
+  margin: 0.25rem;
+  padding: 0.25rem;
+  background: white;
+  border-radius: 0.25rem;
+  border: black solid;
 }
 
 /*form {*/
