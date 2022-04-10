@@ -6,7 +6,7 @@ import { io } from 'socket.io-client'
 
 
 
-const Login = ({setSocket, socket, setLoggedStatus, setToken}) => {
+const Login = ({setSocket, setLoggedStatus, setUserList, socket}) => {
 
 
 
@@ -28,8 +28,7 @@ const Login = ({setSocket, socket, setLoggedStatus, setToken}) => {
             errors.password = 'Must be 20 characters or less';
         }
 
-
-
+        // reg-Ex front end validation
         // if (!values.email) {
         //
         //     errors.email = 'Required';
@@ -39,8 +38,6 @@ const Login = ({setSocket, socket, setLoggedStatus, setToken}) => {
         //     errors.email = 'Invalid email address';
         //
         // }
-
-
 
         return errors;
 
@@ -60,39 +57,18 @@ const Login = ({setSocket, socket, setLoggedStatus, setToken}) => {
             const response = await axios.post('/login', {userName, password})
             if (response.data.validatedUser.token) {
                 localStorage.setItem('token', response.data.validatedUser.token)
-                setLoggedStatus(true)
-                // const newSocket = await io('http://localhost:3001')
-                // const tokenValidated = await axios.get('/login', )
-                // console.log(newSocket)
-
-
-                     // setSocket(newSocket)
-
-
-                // newSocket.on('connection', console.log('connection successful'))
+                // supposed to provide a socket only after login
+                // * newSocket is point of Socket connection at login, there is second point of socket connection, but after login it doesn't matter for users list because login status is already achieved in the database
+                const newSocket = await io('http://localhost:3001')
+                setLoggedStatus(1)
+                setSocket(newSocket)
 
             }
-
-
-
 
         },
 
 
     });
-
-async function logOut (event) {
-        event.preventDefault()
-        const response = await axios.get('/logout')
-        if (response) {
-            console.log('made request')
-        }
-
-
-}
-
-
-
 
     return (
         <div className='login-form'>
@@ -110,7 +86,6 @@ async function logOut (event) {
                <div>
                <label htmlFor='password'>Password</label>
                <input type='text' id='password' name='password' value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
-               {/*{formik.errors.password ? <div>{formik.errors.password}</div> : null}*/}
                {formik.touched.password && formik.errors.password ? (
 
                    <div>{formik.errors.password}</div>
@@ -120,7 +95,7 @@ async function logOut (event) {
                <button type='submit'>Login</button>
 
            </form>
-                <button type='logout' onClick={event => logOut(event)}>Logout</button>
+
             </div>
         </div>
 

@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const db = require('./sqlStatements')
-// const chat = require('./utils/connectionWS')
 const chat = require('../utils/connectionWS')
 
 
@@ -23,7 +22,7 @@ validateLogin = async (dbUserEntry, formUserPass, io) => {
 
     } else {
 
-        console.log(userName)
+        // console.log(userName)
         let validatedUser = {}
         let d = new Date()
         let tokenPayload = {userName: userName, iat: d.getTime()}
@@ -32,9 +31,10 @@ validateLogin = async (dbUserEntry, formUserPass, io) => {
         validatedUser.token = accessToken
         validatedUser.date = d
         validatedUser.userName = userName
+
         // console.log(validatedUser)
         await db.updateLoginStatusIn(userId)
-        // await chat(io, userName)
+        // await console.log(chat.chat(io, userName))
         return (validatedUser)
         // res.setHeader('auth-token', accessToken.toString())
         // res.cookie('token', accessToken, {

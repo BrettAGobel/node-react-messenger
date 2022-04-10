@@ -3,3 +3,5 @@
 .env
 /server/utils/sqlStatements.md
 /client/node_modules
+/server/database.sql
+./server/database.sql

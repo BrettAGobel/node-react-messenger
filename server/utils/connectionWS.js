@@ -74,10 +74,13 @@ class connectionWS {
 async function chat(io, socket, user1) {
     // io.removeAllListeners()
     // await io.use()jwt.decode(token, process.env.ACCESS_TOKEN_SECRET)
-    // io.on('connect', (socket) => {
-    //     console.log('new connection')
-        // console.log(userName)
+    io.on('connect', (socket) => {
+
         return new connectionWS(io, socket, user1)
+    })
+        //     console.log('new connection')
+        // console.log(userName)
+
 
 }
 

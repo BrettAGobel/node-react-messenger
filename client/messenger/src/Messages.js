@@ -1,71 +1,76 @@
 import React, {useState, useEffect, useRef} from "react";
 
-import axios from "axios";
 
-const Messages = ({socket, currentUser}) => {
+const Messages = ({socket}) => {
 
 
     const [messages, setMessages] = useState([])
     const [currentSide, setSide] = useState('message-container-right')
     const messagesEndRef = useRef(null)
+
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }
 
-    const leftOrRight = (currentSide) => {
-        let newSide;
-        (currentSide === 'message-container-right')
-            ? newSide = 'message-container-left'
-            : newSide = 'message-container-right';
-        setSide(newSide)
-    }
+// was trying to get messages to go back and forth.  might work on this later for 1 to 1 connection but in allChat it doesn't matter
 
-
+// const leftOrRight = (currentSide) => {
+    //     let newSide;
+    //     (currentSide === 'message-container-right')
+    //         ? newSide = 'message-container-left'
+    //         : newSide = 'message-container-right';
+    //     setSide(newSide)
+    // }
 
 // useEffect(() =>{
 //     leftOrRight(currentSide)
 // },[])
 
 
-
-
 useEffect(() => {
+
+    socket.on('greeting', greeting => {
+        let temp = messages
+        temp.push(greeting)
+        setMessages([...temp])
+        scrollToBottom()
+    })
+
+
     socket.on('message', message => {
         let temp = messages
         temp.push(message)
         setMessages([...temp])
-        leftOrRight(currentSide)
         scrollToBottom()
 
-
-        return () => {
-            socket.close()
-        }
-
-
-
     })
-},[socket])
+
+}, [socket])
+
+// private message supposed to make its own room between the two sockets.  But for my implementation It's better to manually create a room
+//     socket.on('private message', (privateMessage) => {
+//         console.log(`From: ${privateMessage.socketId}\n Message: ${privateMessage.value}`)
+//     })
+//
+// }, [socket])
 
 
     if (messages.length >= 1) {
-
-        return (
-            <div className='message-container'>
-                {messages.map(messageObj => {
-                    return (<>
-                        <div key={messages[messageObj]} className='message-content-container' >
-                            <span id='sender'>{messageObj.user}:  </span>
-                            <span id='message-content'>{messageObj.message}</span>
-                        </div>
-                    <div ref={messagesEndRef}></div></>
-                    )
-                })}
-
-
-            </div>
-        )
-
+            return (
+                <div className='message-container'>
+                    {messages.map(messageObj => {
+                        return (
+                            <>
+                                <div className='message-content-container'>
+                                    <span id='sender'>{messageObj.user}</span>
+                                    <span id='message-content'>{messageObj.messageText}</span>
+                                </div>
+                                <div ref={messagesEndRef}></div>
+                            </>
+                        )
+                    })}
+                </div>
+            )
 
     } return null
 
