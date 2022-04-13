@@ -49,6 +49,7 @@ const [room, setRoom] =  useState(null)
                         setSocket(newSocket)
                         setLoggedStatus(1)
                         setCurrentUser(user)
+                        setRoom({socketId: "General"})
 
                     } else console.log('no token this time')
                 })

@@ -3,7 +3,7 @@ import axios from "axios";
 
 export default function Users ({socket, usersList , setUsersList, value, currentUser, setRoom, currentRoom}) {
 
-// const [usersList, setUsersList] = useState([])
+
    const [isActive, setActive] = useState(false)
 
 
@@ -12,24 +12,17 @@ export default function Users ({socket, usersList , setUsersList, value, current
 
     }
 
-    const sendPrivate = (event) => {
-
-        let targetSocketId = event.target.dataset.socket
-        let privateMessage = {value: value, socketId: targetSocketId}
-        socket.emit('private message', privateMessage)
-    }
-
-
     const changeRoom = (event) => {
-       // if (event.target.innerText === 'General') {
-       //
-       // }
 
         let socketId = event.target.dataset.socket
         let userName = event.target.dataset.user
         let recipient = {
             socketId, userName
         }
+        if (socketId === "General") {
+            recipient = {socketId: "General"}
+        }
+
         let cb = ()=> {
 
         }
@@ -67,13 +60,13 @@ export default function Users ({socket, usersList , setUsersList, value, current
                 <div className='users-container-header'>
                     <h1>Users List</h1>
                 </div>
-                <div className={'user'} onDoubleClick={event => {changeRoom(event)}}>General</div>
+                <div className={'user'} onDoubleClick={event => {changeRoom(event)}} data-socket={"General"}>General</div>
 
-                {usersList.map(({ userName, socketId }) => {
+                {usersList.map(obj => {
                     return (
                         <>
-                        <div className={'user'}  onDoubleClick={event => changeRoom(event)} data-socket={socketId} data-user={userName}>
-                                 <span>{userName}</span>
+                        <div className={'user'}  onDoubleClick={event => changeRoom(event)} data-socket={obj.address} data-user={obj.userName}>
+                                 <span>{obj.userName}</span>
                              </div>
                         </>
                     )

@@ -38,10 +38,11 @@ useEffect(() => {
 
 
     socket.on('message', message => {
-        setRoom(message.targetRoom)
+
         let temp = messages
         temp.push(message)
         setMessages([...temp])
+        setRoom(message.to)
         scrollToBottom()
 
     })

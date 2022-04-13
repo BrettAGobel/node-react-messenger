@@ -16,7 +16,7 @@ const postInputRef = useRef(null)
         messageText: value.value,
         from: currentUser,
         userSocket: socket.id,
-        to: room,
+        to: room.socketId,
         recipient: room.userName
     })
         postInputRef.current.value = ''

@@ -62,7 +62,7 @@ const Login = ({setSocket, setLoggedStatus, setUserList, socket, setRoom}) => {
                 const newSocket = await io('http://localhost:3001')
                 setLoggedStatus(1)
                 setSocket(newSocket)
-                setRoom('General')
+                setRoom({socketId: "General"})
 
             }
 

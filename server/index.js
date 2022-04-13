@@ -59,7 +59,7 @@ function getLoggedUsers () {
 }
 
 io.on('connect', async socket => {
-
+    socket.join('General')
     socket.emit('getUser')
     socket.on('clientUser', user => {
         let person = {userName: user, address: socket.id}
@@ -72,7 +72,7 @@ io.on('connect', async socket => {
 
         }   loggedPeople.push(person)
 
-        console.log(loggedPeople)
+        console.log(loggedPeople + 'first instance')
         // let userEntry =  await db.getUserByUserName(user)
         // let userId = userEntry[0].userId
         // let socketId = socket.id
@@ -109,29 +109,17 @@ io.on('connect', async socket => {
         let result = await db.updateLoginStatusOut(userId)
         if (result)  {
 
-
-
-                let temp = [...loggedPeople]
-                let filtered = temp.filter(loggedUser => loggedUser.userName !== userObj.userName )
-                loggedPeople = filtered
-                console.log(loggedPeople)
-                io.emit('users', loggedPeople)
-
-
-
-
-
+            let temp = [...loggedPeople]
+            let filtered = temp.filter(loggedUser => loggedUser.userName !== userObj.userName )
+            loggedPeople = filtered
+            console.log(loggedPeople)
+            io.emit('users', loggedPeople)
             io.emit('message', {messageText: 'a user has logged out'})
             io.to(userObj.socketId).emit('logged off')
         }
 
     })
 
-    socket.on("private message", (privateMessage) => {
-        console.log(privateMessage)
-        socket.to(privateMessage.socketId).emit("private message", privateMessage
-        );
-    });
 
     socket.on('create-room', obj => {
 
