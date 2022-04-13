@@ -6,7 +6,7 @@ import { io } from 'socket.io-client'
 
 
 
-const Login = ({setSocket, setLoggedStatus, setUserList, socket}) => {
+const Login = ({setSocket, setLoggedStatus, setUserList, socket, setRoom}) => {
 
 
 
@@ -62,6 +62,7 @@ const Login = ({setSocket, setLoggedStatus, setUserList, socket}) => {
                 const newSocket = await io('http://localhost:3001')
                 setLoggedStatus(1)
                 setSocket(newSocket)
+                setRoom('General')
 
             }
 

@@ -24,28 +24,32 @@ export default function Users ({socket, usersList , setUsersList, value, current
        // if (event.target.innerText === 'General') {
        //
        // }
+
         let socketId = event.target.dataset.socket
-        let roomName = `${event.target.dataset.user} & ${currentUser}'s room`
+        let userName = event.target.dataset.user
+        let recipient = {
+            socketId, userName
+        }
         let cb = ()=> {
 
         }
 
-        setRoom(`${socketId}`)
+        setRoom(recipient)
 
     }
 
 
     useEffect(() => {
         socket.on('users', async users => {
+            console.log(users)
+            // let userArr = await users.map(userObj => {
+            // return {userName: userObj.userName, socketId:userObj.userSocket }
+            //
+            // })
 
-            let userArr = await users.map(userObj => {
-            return {userName: userObj.userName, socketId:userObj.userSocket }
-
-            })
-
-            setUsersList(userArr)
+            setUsersList(users)
         })
-    }, [socket])
+    }, [usersList])
 
 
     useEffect(()=> {

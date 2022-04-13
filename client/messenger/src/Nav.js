@@ -15,22 +15,25 @@ const Nav = ({setLoggedStatus, socket, setSocket, usersList, setUsersList}) => {
 
     useEffect(() => {
         let token = localStorage.getItem('token')
+
+
         socket.on('logged off', ()=> {
             socket.disconnect()
             localStorage.removeItem('token')
             setLoggedStatus(0)
             setSocket('')
+            setUsersList([])
 
         })
     }, [socket])
 
 
-async function logout () {
+async function logout (event) {
     let token = localStorage.getItem('token')
     let payload = jwt.decode(token)
     let user = payload.userName
     let userObj = {
-        user: user,  socketId: socket.id
+        userName: user,  socketId: socket.id
     }
     console.log(userObj)
     socket.emit('logout',  userObj)
@@ -71,7 +74,7 @@ async function logout () {
             <button id='close-button'><FontAwesomeIcon icon={faXmark} /></button>
             <button id='menu-options'><FontAwesomeIcon icon={faCaretDown} /></button>
 
-            <button id='logout' onClick={event => logout()}>Logout</button>
+            <button id='logout' onClick={event => logout(event)}>Logout</button>
             </div>
         </nav>
     )

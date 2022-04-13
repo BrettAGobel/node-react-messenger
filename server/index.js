@@ -6,6 +6,7 @@
 
 
 
+
 const jwt = require('jsonwebtoken')
 const wS = require('./utils/connectionWS')
 const express = require('express')
@@ -48,7 +49,8 @@ server.listen(expressPort, () => {
 /* can apparently attach properties to the socket object.  The seemingly 'traditional' way of using socket io
     is to attach user information on the connection and push it to a user array defined here directly in the server
 */
-let loggedPerson = []
+let loggedPeople = []
+
 
 function getLoggedUsers () {
     let loggedUsers = db.getAllLoggedUsers()
@@ -59,20 +61,30 @@ function getLoggedUsers () {
 io.on('connect', async socket => {
 
     socket.emit('getUser')
-    socket.on('clientUser', async user => {
+    socket.on('clientUser', user => {
+        let person = {userName: user, address: socket.id}
 
-        let userEntry =  await db.getUserByUserName(user)
-        let userId = userEntry[0].userId
-        let socketId = socket.id
-        await db.updateUserSocket(userId, socketId)
-        let users = await getLoggedUsers()
-        socket.emit('users', users)
+        if (loggedPeople.length > 0) {
+
+            let temp = [...loggedPeople]
+            let filtered = temp.filter(loggedUser => loggedUser.userName !== person.userName )
+            loggedPeople = filtered
+
+        }   loggedPeople.push(person)
+
+        console.log(loggedPeople)
+        // let userEntry =  await db.getUserByUserName(user)
+        // let userId = userEntry[0].userId
+        // let socketId = socket.id
+        // await db.updateUserSocket(userId, socketId)
+        let users = loggedPeople
+        io.emit('users', users)
 
     })
 
-    let users = await getLoggedUsers()
+    // let users = await getLoggedUsers()
     socket.emit('greeting', {messageText: "welcome to the server", user: 'Server'})
-    io.emit('users', users)
+    // io.emit('users', users)
 
     socket.on('message', message => {
 
@@ -82,22 +94,33 @@ io.on('connect', async socket => {
         // if (channel) {
         //     io.to()
         // }
-        io.to(message.targetRoom).emit('message', message)
+        socket.join(message.to)
+        console.log(socket.rooms)
+        io.in(message.to).emit('message', message)
 
     })
 
 
     socket.on('logout', async (userObj) => {
 
-        let user = userObj.user
+        let user = userObj.userName
         let userEntry =  await db.getUserByUserName(user)
         let userId = userEntry[0].userId
         let result = await db.updateLoginStatusOut(userId)
-        if (result) {
+        if (result)  {
 
-            let loggedUsers = await getLoggedUsers()
-            console.log(loggedUsers)
-            io.emit('users', loggedUsers)
+
+
+                let temp = [...loggedPeople]
+                let filtered = temp.filter(loggedUser => loggedUser.userName !== userObj.userName )
+                loggedPeople = filtered
+                console.log(loggedPeople)
+                io.emit('users', loggedPeople)
+
+
+
+
+
             io.emit('message', {messageText: 'a user has logged out'})
             io.to(userObj.socketId).emit('logged off')
         }
@@ -127,7 +150,7 @@ io.on('connect', async socket => {
 
 app.post('/validateToken',  (req, res) => {
     console.log('you have hit \/validateToken')
-    console.log(req.body.socketId)
+
     try {
 
         jwt.verify(req.body.token, process.env.ACCESS_TOKEN_SECRET)

@@ -3,7 +3,7 @@ import axios from "axios";
 import Messages from "./Messages";
 import  { io } from 'socket.io-client'
 
-const Post = ({socket, currentUser, value, setValue, currentRoom}) => {
+const Post = ({socket, currentUser, value, setValue, room}) => {
 
 
 const postInputRef = useRef(null)
@@ -11,7 +11,14 @@ const postInputRef = useRef(null)
 
     async function onSubmit(event) {
     event.preventDefault()
-    await socket.emit('message', {messageText: value.value, user: currentUser, userSocket: socket.id, messageTarget: 'socket address', targetRoom: currentRoom })
+    await socket.emit('message', {
+
+        messageText: value.value,
+        from: currentUser,
+        userSocket: socket.id,
+        to: room,
+        recipient: room.userName
+    })
         postInputRef.current.value = ''
         setValue('')
 

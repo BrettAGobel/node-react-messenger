@@ -20,8 +20,8 @@ const [value, setValue] = useState({value: ''})
 const [socket, setSocket] = useState('')
 const [loggedStatus, setLoggedStatus] = useState(0)
 const [currentUser, setCurrentUser] = useState('')
-const [usersList, setUsersList] = useState([])
-const [currentRoom, setRoom] =  useState('')
+const [usersList, setUsersList] = useState('')
+const [room, setRoom] =  useState(null)
 
 
 
@@ -41,7 +41,7 @@ const [currentRoom, setRoom] =  useState('')
 
             async function validateToken () {
 
-                let res = await axios.post('/validateToken', {token: localStorage.token, socketId: socket.id}).then(response => {
+                await axios.post('/validateToken', {token: localStorage.token}).then(response => {
                     if (response.data.message === 'token is valid') {
                         console.log('token was valid ::)')
 
@@ -83,18 +83,18 @@ useEffect(()=> {
   return (
     <div className="App">
       <div className="main">
-          {loggedStatus === 0 ? <Login setSocket={newSocket => {setSocket(newSocket)}} socket={socket} setLoggedStatus={setLoggedStatus} /> : null}
+          {loggedStatus === 0 ? <Login setSocket={newSocket => {setSocket(newSocket)}} socket={socket} setLoggedStatus={setLoggedStatus} setRoom={setRoom}/> : null}
           {socket   ?  (
               <>
           <div className='main-container'>
               <Nav setLoggedStatus={setLoggedStatus} socket={socket} setSocket={setSocket} usersList={usersList} setUsersList={setUsersList}  />
-              <Users socket = {socket} usersList={usersList} setUsersList={setUsersList} currentroom={currentRoom} setRoom={setRoom} value={value} currentUser={currentUser}/>
+              <Users socket = {socket} usersList={usersList} setUsersList={setUsersList} room={room} setRoom={setRoom} value={value} currentUser={currentUser}/>
                 <div className='message-module'>
-                    <div className={'current-room'}>General</div>
+                    {/*{room !== null ? <div className={'current-room'}>{room.to}</div> : null}*/}
                       <div className='messages-main'>
-                      <Messages socket={socket} />
+                      <Messages socket={socket} room={room} setRoom={setRoom}/>
                       </div>
-                      <Post socket={socket} currentUser={currentUser} value={value} setValue={setValue} currentRoom={currentRoom}/>
+                      <Post socket={socket} currentUser={currentUser} value={value} setValue={setValue} room={room}/>
                 </div>
           </div>
               </>
